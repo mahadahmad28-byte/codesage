@@ -1,0 +1,30 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - CHROMA_PERSIST_DIR=/data/chroma
+      - REPOS_DIR=/data/repos
+    volumes:
+      - codesage_data:/data
+    restart: unless-stopped
+
+  frontend:
+    image: node:20-alpine
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "5173:5173"
+    command: sh -c "npm install && npm run dev -- --host"
+    depends_on:
+      - backend
+    environment:
+      - VITE_API_URL=http://backend:8000
+
+volumes:
+  codesage_data:

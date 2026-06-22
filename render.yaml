@@ -1,0 +1,25 @@
+# render.yaml — Render.com deployment configuration for CodeSage backend
+# Deploy: connect GitHub repo → Render detects this file automatically
+
+services:
+  - type: web
+    name: codesage-backend
+    runtime: python
+    region: oregon
+    plan: free
+    rootDir: .
+    buildCommand: pip install -e .
+    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false          # Set manually in Render dashboard
+      - key: CHROMA_PERSIST_DIR
+        value: /opt/render/project/src/chroma_data
+      - key: REPOS_DIR
+        value: /opt/render/project/src/repos
+      - key: PYTHON_VERSION
+        value: 3.11.0
+    disk:
+      name: codesage-data
+      mountPath: /opt/render/project/src/chroma_data
+      sizeGB: 1              # Free tier allows 1GB persistent disk
