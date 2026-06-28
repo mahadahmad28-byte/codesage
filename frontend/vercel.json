@@ -13,7 +13,7 @@
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "https://codesage-backend.onrender.com/api/$1"
+      "dest": "https://codesage-eqzp.onrender.com/api/$1"
     },
     {
       "src": "/(.*)",
@@ -21,6 +21,6 @@
     }
   ],
   "env": {
-    "VITE_API_URL": "https://codesage-backend.onrender.com"
+    "VITE_API_URL": "https://codesage-eqzp.onrender.com"
   }
 }
