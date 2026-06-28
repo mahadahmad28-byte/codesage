@@ -43,12 +43,14 @@ def generate_query_embedding(query: str) -> list[float]:
     return response.embeddings[0].values
 
 
-def generate_embeddings_batch(texts: list[str], batch_size: int = 20) -> list[list[float]]:
+import time
+
+def generate_embeddings_batch(texts: list[str], batch_size: int = 100) -> list[list[float]]:
     """
     Generate embeddings for multiple texts in batches.
 
-    Gemini free tier has rate limits (1500 RPD / 100 QPM),
-    so we process in small batches.
+    Gemini free tier has rate limits, so we process in larger batches (100)
+    and add a slight delay between requests to avoid 429 RESOURCE_EXHAUSTED.
     """
     all_embeddings = []
 
@@ -60,5 +62,9 @@ def generate_embeddings_batch(texts: list[str], batch_size: int = 20) -> list[li
             config=types.EmbedContentConfig(task_type="RETRIEVAL_DOCUMENT"),
         )
         all_embeddings.extend([emb.values for emb in response.embeddings])
+        
+        # Add a delay to prevent hitting API rate limits on free tier (15 RPM max)
+        if i + batch_size < len(texts):
+            time.sleep(4.0)
 
     return all_embeddings
