@@ -8,8 +8,8 @@ services:
     region: oregon
     plan: free
     rootDir: .
-    buildCommand: pip install -e .
-    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    buildCommand: "pip install ."
+    startCommand: "uvicorn backend.main:app --host 0.0.0.0 --port $PORT"
     envVars:
       - key: GEMINI_API_KEY
         sync: false          # Set manually in Render dashboard
@@ -17,8 +17,6 @@ services:
         value: /opt/render/project/src/chroma_data
       - key: REPOS_DIR
         value: /opt/render/project/src/repos
-      - key: PYTHON_VERSION
-        value: 3.11.0
     disk:
       name: codesage-data
       mountPath: /opt/render/project/src/chroma_data
