@@ -8,8 +8,11 @@ from google.genai import types
 
 load_dotenv()
 
-# Initialize the new GenAI client
-_client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+# Initialize the new GenAI client with v1beta (required for text-embedding-004)
+_client = genai.Client(
+    api_key=os.getenv("GEMINI_API_KEY"),
+    http_options={'api_version': 'v1beta'}
+)
 
 # Embedding model — free tier, 768 dimensions
 EMBEDDING_MODEL = "text-embedding-004"
