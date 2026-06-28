@@ -1,26 +1,12 @@
 {
-  "version": 2,
-  "name": "codesage-frontend",
-  "builds": [
+  "rewrites": [
     {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
-      }
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "https://codesage-eqzp.onrender.com/api/$1"
+      "source": "/api/:path*",
+      "destination": "https://codesage-eqzp.onrender.com/api/:path*"
     },
     {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
-  ],
-  "env": {
-    "VITE_API_URL": "https://codesage-eqzp.onrender.com"
-  }
+  ]
 }
