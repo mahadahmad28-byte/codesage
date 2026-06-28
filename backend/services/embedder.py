@@ -44,27 +44,38 @@ def generate_query_embedding(query: str) -> list[float]:
 
 
 import time
+from google.genai.errors import APIError
 
 def generate_embeddings_batch(texts: list[str], batch_size: int = 100) -> list[list[float]]:
     """
     Generate embeddings for multiple texts in batches.
-
-    Gemini free tier has rate limits, so we process in larger batches (100)
-    and add a slight delay between requests to avoid 429 RESOURCE_EXHAUSTED.
+    Includes robust retry logic for 429 RESOURCE_EXHAUSTED errors.
     """
     all_embeddings = []
 
     for i in range(0, len(texts), batch_size):
         batch = texts[i : i + batch_size]
-        response = _client.models.embed_content(
-            model=EMBEDDING_MODEL,
-            contents=batch,
-            config=types.EmbedContentConfig(task_type="RETRIEVAL_DOCUMENT"),
-        )
-        all_embeddings.extend([emb.values for emb in response.embeddings])
         
-        # Add a delay to prevent hitting API rate limits on free tier (15 RPM max)
+        # Retry loop for this batch
+        max_retries = 3
+        for attempt in range(max_retries):
+            try:
+                response = _client.models.embed_content(
+                    model=EMBEDDING_MODEL,
+                    contents=batch,
+                    config=types.EmbedContentConfig(task_type="RETRIEVAL_DOCUMENT"),
+                )
+                all_embeddings.extend([emb.values for emb in response.embeddings])
+                break # Success, break out of retry loop
+            except APIError as e:
+                # If we hit a rate limit (429) and haven't exhausted retries, sleep and retry
+                if "429" in str(e) and attempt < max_retries - 1:
+                    time.sleep(15.0) # Wait 15 seconds before retrying
+                    continue
+                raise e # Re-raise if it's not a 429 or we ran out of retries
+        
+        # Add a delay between successful batches to prevent hitting the limit
         if i + batch_size < len(texts):
-            time.sleep(4.0)
+            time.sleep(5.0)
 
     return all_embeddings
