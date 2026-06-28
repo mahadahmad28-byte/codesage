@@ -4,7 +4,7 @@
 
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)](https://reactjs.org)
-[![Gemini](https://img.shields.io/badge/Gemini_API-2.0_Flash-4285F4?logo=google&logoColor=white)](https://aistudio.google.com)
+[![Gemini](https://img.shields.io/badge/Gemini_API-2.5_Flash-4285F4?logo=google&logoColor=white)](https://aistudio.google.com)
 [![ChromaDB](https://img.shields.io/badge/ChromaDB-Vector_Store-orange)](https://trychroma.com)
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
@@ -52,7 +52,7 @@ Responses stream in real-time with **source citations** linking to exact files a
 │    │ Chunker  │    │ Vector Store  │   ┌──────────────────┐  │
 │    │ (line +  │    │  (ChromaDB)   │   │   Gemini API     │  │
 │    │  AST)    │    │  persistent   │   │  text-embedding  │  │
-│    └──────────┘    └───────────────┘   │  -004 + 2.0 Flash│  │
+│    └──────────┘    └───────────────┘   │  -004 + 2.5 Flash│  │
 │                                        └──────────────────┘  │
 └──────────────────────────────────────────────────────────────┘
 ```
@@ -83,6 +83,7 @@ Responses stream in real-time with **source citations** linking to exact files a
 ### 1 — Backend
 
 ```bash
+git clone https://github.com/mahadahmad28-byte/codesage.git
 cd codesage
 
 # Create and activate virtual environment
@@ -228,7 +229,7 @@ ChromaDB cosine similarity search → top 8 code chunks
 Build context: "[Source 1: auth.py L42-67] def login(): ..."
       │
       ▼
-Augmented prompt → Gemini 2.0 Flash (streaming)
+Augmented prompt → Gemini 2.5 Flash (streaming)
       │
       ▼
 Streamed answer with file/line citations → Frontend
@@ -259,4 +260,4 @@ Streamed answer with file/line citations → Frontend
 
 ---
 
-*Built as a portfolio project by a CS student — demonstrates RAG, vector search, and full-stack development.*
+*Built as a portfolio project by Muhammad Mahad Ahmad — demonstrates RAG, vector search, and full-stack development. [GitHub](https://github.com/mahadahmad28-byte)*
